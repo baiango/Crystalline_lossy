@@ -26,19 +26,69 @@ There will be some educational Python scripts in the `/edu` folder used during c
 **Archiver**
 -	BZip3
 
-**Sharpness Threshold Measure (%) implementation**
+## Core CLY Implementation
+**YCoCg**
 
-The Laplacian function is defined as below, where `$I(x, y)` is the index of the image:
+-	**RGB to YCoCg:**
+```math
+Let f(r: u8, g: u8, b: u8) -> (u8, i8, i8) = \\
+\begin{bmatrix}
+Y \\
+C_o \\
+C_g
+\end{bmatrix}
+=
+\left\lfloor
+\begin{bmatrix}
+\frac{R}{4} & \frac{G}{2} & \frac{B}{4} \\
+\frac{R: i16}{2} & 0 & \frac{-B : i16}{2} \\
+\frac{-R: i16}{4} & \frac{G : i16}{2} & \frac{-B : i16}{4}
+\end{bmatrix}
+\right\rfloor
+\begin{bmatrix}
+R \\
+G \\
+B
+\end{bmatrix}
+```
+
+-	**YCoCg to RGB:**
+```math
+Let f(y: u8, co: i8, cg: i8) -> (u8, u8, u8) = \\
+\begin{bmatrix}
+R \\
+G \\
+B
+\end{bmatrix}
+=
+\left\lfloor
+\begin{bmatrix}
+Y & Co & -Cg \\
+Y & 0 & Cg \\
+Y & -Co & -Cg
+\end{bmatrix}
+\right\rfloor
+\begin{bmatrix}
+Y: i16 \\
+C_o: i16 \\
+C_g: i16
+\end{bmatrix}
+```
+
+**Sharpness Threshold Measure (%)**
+
+-	**Laplacian function**: Where `I(x, y)` is the index of the image:
+
 ```math
 \nabla^2 I(x, y) =
+I \times
 \begin{bmatrix}
 0 & 1 & 0 \\
 1 & -4 & 1 \\
 0 & 1 & 0
 \end{bmatrix}
-I
 ```
-The Sharpness Threshold Measure function is defined as below, where `Img` is two grayscale images to compare and `T` is the threshold:  
+-	**Sharpness Threshold Measure**: Where `Img` is two grayscale images to compare and `T` is the threshold:  
 It's recommended to set the threshold to 8 to ignore film grains.
 ```math
 \left( \frac{\sum \mathbb{I}_{\left| \nabla^2 Img_1 - \nabla^2 Img_2 \right| \geq T}}{\text{total\_pixels}} \right) \times 100\%
