@@ -20,6 +20,7 @@ There will be some educational Python scripts in the `/edu` folder used during c
 
 **Notes**
 -	Self-similarity transform will use rotations and flips to match the previous block.
+-	The strength of quantization will be based on Sharpness Threshold Measure (%)
 
 **Archiver**
 -	BZip3
