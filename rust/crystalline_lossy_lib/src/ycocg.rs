@@ -1,17 +1,18 @@
-#[no_mangle]
 pub fn rgb_to_ycocg(r: u8, g: u8, b: u8) -> (u8, i8, i8) {
 	let y = r / 4 + g / 2 + b / 4;
-	let co = (r / 2 - b / 2) as i8;
-	let cg = -((r / 4) as i8) + (g / 2) as i8 + -((b / 4) as i8);
-	(y, co, cg)
+	let co = (r as i16 - b as i16) / 2;
+	let cg = -(r as i16 / 4) + g as i16 / 2 + -(b as i16 / 4);
+	(y, co as i8, cg as i8)
 }
 
-#[no_mangle]
 pub fn ycocg_to_rgb(y: u8, co: i8, cg: i8) -> (u8, u8, u8) {
-	let r = y.wrapping_add_signed(co.wrapping_sub(cg));
-	let g = y.wrapping_add_signed(cg);
-	let b = (y as i8).wrapping_sub(co).wrapping_sub(cg) as u8;
-	(r, g, b)
+	let y = y as i16;
+	let co = co as i16;
+	let cg = cg as i16;
+	let r = y + co - cg;
+	let g = y + cg;
+	let b = y - co - cg;
+	(r as u8, g as u8, b as u8)
 }
 
 #[cfg(test)]
@@ -32,5 +33,21 @@ mod test {
 		assert_eq!((y, co, cg), (253, 0, 1));
 		let (r, g, b) = ycocg_to_rgb(y, co, cg);
 		assert_eq!((r, g, b), (252, 254, 252));
+	}
+
+	#[test]
+	fn test_ycocg_yellow() {
+		let (y, co, cg) = rgb_to_ycocg(255, 255, 0);
+		assert_eq!((y, co, cg), (190, 127, 64));
+		let (r, g, b) = ycocg_to_rgb(y, co, cg);
+		assert_eq!((r, g, b), (253, 254, 255));
+	}
+
+	#[test]
+	fn test_ycocg_aqua() {
+		let (y, co, cg) = rgb_to_ycocg(0, 255, 255);
+		assert_eq!((y, co, cg), (190, -127, 64));
+		let (r, g, b) = ycocg_to_rgb(y, co, cg);
+		assert_eq!((r, g, b), (255, 254, 253));
 	}
 }
