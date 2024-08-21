@@ -1,6 +1,7 @@
 from PIL import Image
 import numpy as np
 from scipy.signal import convolve2d
+from skimage.metrics import structural_similarity
 
 def calculate_mse(original, transformed):
 	return np.mean((original - transformed) ** 2)
@@ -43,60 +44,62 @@ def calculate_laplacian(image):
 	laplacian_image = convolve2d(image, laplacian, mode='same', boundary='symm')
 	return laplacian_image
 
-def calculate_sharpness_change(img1, img2, threshold=8):
-	img1 = np.array(img1.convert('L'))
-	img2 = np.array(img2.convert('L'))
+def calculate_sharpness_change(original, transformed, threshold=8):
+	original_array = np.array(original.convert('L'))
+	transformed_array = np.array(transformed.convert('L'))
 
-	laplacian1 = calculate_laplacian(img1)
-	laplacian2 = calculate_laplacian(img2)
+	laplacian1 = calculate_laplacian(original_array)
+	laplacian2 = calculate_laplacian(transformed_array)
 
 	sharpness_diff = np.abs(laplacian1 - laplacian2)
 	sharpness_change_detected = sharpness_diff >= threshold
-	sharpness_diff_db = 10.0 * np.log10(np.sum(sharpness_diff)) if sharpness_diff.any() else 0.0
-	sharpness_threshold_db = 10.0 * np.log10(np.sum(sharpness_change_detected)) if sharpness_change_detected.any() else 0.0
+	sharpness_diff_pct = np.sum(sharpness_diff) / np.prod(sharpness_diff.shape) * 100.0
+	sharpness_threshold_pct = np.sum(sharpness_change_detected) / np.prod(sharpness_diff.shape) * 100.0
 
-	return sharpness_diff_db, sharpness_threshold_db
+	return sharpness_diff_pct, sharpness_threshold_pct
+
+def calculate_ssim(original, transformed):
+	return structural_similarity(original, transformed, multichannel=True, channel_axis=2)
+
+def calculate_pixel_difference(original, transformed):
+	return np.sum(np.abs(original - transformed)) / np.prod(original.shape)
 
 def compare_metrics(image1_path, image2_path):
 	img1 = Image.open(image1_path)
 	img2 = Image.open(image2_path)
 
 	psnr = calculate_psnr(np.array(img1), np.array(img2))
-	contrast_ratio = calculate_contrast_ratio(img1, img2)
+	ssim = calculate_ssim(np.array(img1), np.array(img2))
+	contrast_ratio_db = calculate_contrast_ratio(img1, img2)
 	brightness_diff = calculate_brightness_difference(np.array(img1), np.array(img2))
 	saturation_diff = calculate_saturation_difference(img1, img2)
 	sharpness_diff_db, sharpness_threshold_db = calculate_sharpness_change(img1, img2)
+	pixel_diff = calculate_pixel_difference(np.array(img1), np.array(img2))
 
-	return psnr, contrast_ratio, brightness_diff, saturation_diff, sharpness_threshold_db
+	return psnr, ssim, contrast_ratio_db, brightness_diff, saturation_diff, sharpness_threshold_db, pixel_diff
 
+def print_metrics(image1_path, image2_path):
+	psnr, ssim, contrast_ratio_db, brightness_diff, saturation_diff, sharpness_threshold_db, pixel_diff = compare_metrics(image1_path, image2_path)
+	print(f'{image1_path} & {image2_path} | {psnr:.2f} | {ssim:.2f} | {contrast_ratio_db:.2f} | {brightness_diff:.2f} | {saturation_diff:.2f} | {sharpness_threshold_db:.2f} | {pixel_diff:.2f}')
 
 if __name__ == '__main__':
 	# Usage
-	image1_path = 'eye.png'
-	image2_path = 'eye_100.jpg'
-	image3_path = 'eye_99.jpg'
-	image4_path = 'eye_95.jpg'
-	image5_path = 'eye_5.jpg'
-	image6_path = 'eye_noise.png'
+	original_image = 'eye.png'
+	jpg_100_image = 'eye_100.jpg'
+	jpg_99_image = 'eye_99.jpg'
+	jpg_95_image = 'eye_95.jpg'
+	jpg_5_image = 'eye_5.jpg'
+	noisy_image = 'eye_noise.png'
+	color_noisy_image = 'eye_color_noise.png'
 
-	print("Image Pair | PSNR (dB) | Contrast Ratio Difference (dB) | Brightness Difference | Saturation Difference | Sharpness Threshold (dB)")
-	psnr, contrast_ratio_db, brightness_diff, saturation_diff, sharpness_threshold_db = compare_metrics(image4_path, image4_path)
-	print(f'{image4_path} vs {image4_path} | {psnr:.2f} | {contrast_ratio_db:.2f} | {brightness_diff:.2f} | {saturation_diff:.2f} | {sharpness_threshold_db:.2f}')
-
-	psnr, contrast_ratio_db, brightness_diff, saturation_diff, sharpness_threshold_db = compare_metrics(image1_path, image6_path)
-	print(f'{image1_path} vs {image6_path} | {psnr:.2f} | {contrast_ratio_db:.2f} | {brightness_diff:.2f} | {saturation_diff:.2f} | {sharpness_threshold_db:.2f}')
-
-	psnr, contrast_ratio_db, brightness_diff, saturation_diff, sharpness_threshold_db = compare_metrics(image1_path, image2_path)
-	print(f'{image1_path} vs {image2_path} | {psnr:.2f} | {contrast_ratio_db:.2f} | {brightness_diff:.2f} | {saturation_diff:.2f} | {sharpness_threshold_db:.2f}')
-
-	psnr, contrast_ratio_db, brightness_diff, saturation_diff, sharpness_threshold_db = compare_metrics(image1_path, image3_path)
-	print(f'{image1_path} vs {image3_path} | {psnr:.2f} | {contrast_ratio_db:.2f} | {brightness_diff:.2f} | {saturation_diff:.2f} | {sharpness_threshold_db:.2f}')
-
-	psnr, contrast_ratio_db, brightness_diff, saturation_diff, sharpness_threshold_db = compare_metrics(image1_path, image4_path)
-	print(f'{image1_path} vs {image4_path} | {psnr:.2f} | {contrast_ratio_db:.2f} | {brightness_diff:.2f} | {saturation_diff:.2f} | {sharpness_threshold_db:.2f}')
-
-	psnr, contrast_ratio_db, brightness_diff, saturation_diff, sharpness_threshold_db = compare_metrics(image3_path, image4_path)
-	print(f'{image3_path} vs {image4_path} | {psnr:.2f} | {contrast_ratio_db:.2f} | {brightness_diff:.2f} | {saturation_diff:.2f} | {sharpness_threshold_db:.2f}')
-
-	psnr, contrast_ratio_db, brightness_diff, saturation_diff, sharpness_threshold_db = compare_metrics(image1_path, image5_path)
-	print(f'{image1_path} vs {image5_path} | {psnr:.2f} | {contrast_ratio_db:.2f} | {brightness_diff:.2f} | {saturation_diff:.2f} | {sharpness_threshold_db:.2f}')
+	print("Image Pair | PSNR (dB) | SSIM (f) | Contrast Ratio Difference (dB) | Brightness Difference (n) | Saturation Difference (n) | Sharpness Threshold Measure (%) | Pixel Difference (n)")
+	print_metrics(jpg_95_image, jpg_95_image)
+	print_metrics(original_image, noisy_image)
+	print_metrics(original_image, color_noisy_image)
+	print_metrics(original_image, jpg_100_image)
+	print_metrics(original_image, jpg_99_image)
+	print_metrics(original_image, jpg_95_image)
+	print_metrics(jpg_99_image, jpg_100_image)
+	print_metrics(jpg_99_image, jpg_95_image)
+	print_metrics(original_image, jpg_5_image)
+	print_metrics(jpg_100_image, jpg_5_image)
