@@ -1,7 +1,0 @@
-[package]
-name = "crystalline_lossy_wrapper"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-crystalline_lossy = { path = "./crystalline_lossy_lib" }
