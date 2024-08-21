@@ -31,20 +31,18 @@ There will be some educational Python scripts in the `/edu` folder used during c
 
 -	**RGB to YCoCg:**
 ```math
-Let f(r: u8, g: u8, b: u8) -> (u8, i8, i8) = \\
+Let f(r: u8, g: u8, b: u8) -> (u8, i8, i8) =
 \begin{bmatrix}
 Y \\
 C_o \\
 C_g
 \end{bmatrix}
 =
-\left\lfloor
 \begin{bmatrix}
 \frac{R}{4} & \frac{G}{2} & \frac{B}{4} \\
 \frac{R: i16}{2} & 0 & \frac{-B : i16}{2} \\
 \frac{-R: i16}{4} & \frac{G : i16}{2} & \frac{-B : i16}{4}
 \end{bmatrix}
-\right\rfloor
 \begin{bmatrix}
 R \\
 G \\
@@ -54,20 +52,18 @@ B
 
 -	**YCoCg to RGB:**
 ```math
-Let f(y: u8, co: i8, cg: i8) -> (u8, u8, u8) = \\
+Let f(y: u8, co: i8, cg: i8) -> (u8, u8, u8) =
 \begin{bmatrix}
 R \\
 G \\
 B
 \end{bmatrix}
 =
-\left\lfloor
 \begin{bmatrix}
 Y & Co & -Cg \\
 Y & 0 & Cg \\
 Y & -Co & -Cg
 \end{bmatrix}
-\right\rfloor
 \begin{bmatrix}
 Y: i16 \\
 C_o: i16 \\
