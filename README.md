@@ -60,9 +60,9 @@ B
 \end{bmatrix}
 =
 \begin{bmatrix}
-Y & Co & -Cg \\
-Y & 0 & Cg \\
-Y & -Co & -Cg
+Y & C_o & -C_g \\
+Y & 0 & C_g \\
+Y & -C_o & -C_g
 \end{bmatrix}
 \begin{bmatrix}
 Y: i16 \\
@@ -73,11 +73,11 @@ C_g: i16
 
 **Sharpness Threshold Measure (%)**
 
--	**Laplacian function**: Where `I(x, y)` is the index of the image:
+-	**Laplacian function**: Where `Img(x, y)` is the index of the image:
 
 ```math
-\nabla^2 I(x, y) =
-I \times
+\nabla^2 Img(x, y) =
+Img \times
 \begin{bmatrix}
 0 & 1 & 0 \\
 1 & -4 & 1 \\
