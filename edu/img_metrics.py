@@ -44,7 +44,7 @@ def calculate_laplacian(image):
 	laplacian_image = convolve2d(image, laplacian, mode='same', boundary='symm')
 	return laplacian_image
 
-def calculate_sharpness_change(original, transformed, threshold=8):
+def calculate_sharpness_threshold_measure(original, transformed, threshold=8):
 	original_array = np.array(original.convert('L'))
 	transformed_array = np.array(transformed.convert('L'))
 
@@ -73,7 +73,7 @@ def compare_metrics(image1_path, image2_path):
 	contrast_ratio_db = calculate_contrast_ratio(img1, img2)
 	brightness_diff = calculate_brightness_difference(np.array(img1), np.array(img2))
 	saturation_diff = calculate_saturation_difference(img1, img2)
-	sharpness_diff_db, sharpness_threshold_db = calculate_sharpness_change(img1, img2)
+	sharpness_diff_db, sharpness_threshold_db = calculate_sharpness_threshold_measure(img1, img2)
 	pixel_diff = calculate_pixel_difference(np.array(img1), np.array(img2))
 
 	return psnr, ssim, contrast_ratio_db, brightness_diff, saturation_diff, sharpness_threshold_db, pixel_diff

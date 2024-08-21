@@ -21,6 +21,25 @@ There will be some educational Python scripts in the `/edu` folder used during c
 **Notes**
 -	Self-similarity transform will use rotations and flips to match the previous block.
 -	The strength of quantization will be based on Sharpness Threshold Measure (%)
+-	Sharpness Threshold Measure (%) is an in-house grayscale image metric that ignores subtle noise, like film grains. While checking for distracting noise like denoiser removed-noise. It returns in percentage scale.
 
 **Archiver**
 -	BZip3
+
+**Sharpness Threshold Measure (%) implementation**
+
+The Laplacian function is defined as below, where `$I(x, y)` is the index of the image:
+```math
+\nabla^2 I(x, y) =
+\begin{bmatrix}
+0 & 1 & 0 \\
+1 & -4 & 1 \\
+0 & 1 & 0
+\end{bmatrix}
+I
+```
+The Sharpness Threshold Measure function is defined as below, where `Img` is two grayscale images to compare and `T` is the threshold:  
+It's recommended to set the threshold to 8 to ignore film grains.
+```math
+\left( \frac{\sum \mathbb{I}_{\left| \nabla^2 Img_1 - \nabla^2 Img_2 \right| \geq T}}{\text{total\_pixels}} \right) \times 100\%
+```
