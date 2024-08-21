@@ -8,14 +8,18 @@ There will be some educational Python scripts in the `/edu` folder used during c
 ## Blueprint
 **Quadtree split macroblocks:**
 -	**Lossless**
-	-	RGB565 -> Similarity transform -> Sparse (XOR/Delta encoding & flip) bitplane encoding -> RLE -> Elias gamma coding
-	-	RGB565 -> Similarity transform -> FWHT -> RLE -> Elias gamma coding
-	-	RGB565 -> Similarity transform -> Haar wavelet -> RLE -> Elias gamma coding
+	-	RGB565 -> Self-similarity transform -> Sparse (XOR/Delta encoding & swap) bitplane encoding -> RLE -> Elias gamma coding
+	-	RGB565 -> Self-similarity transform -> FWHT -> RLE -> Elias gamma coding
+	-	RGB565 -> Self-similarity transform -> Haar wavelet -> RLE -> Elias gamma coding
 -	**Lossy**
-	-	YCoCg655 -> 4:2:0 -> DCT-II -> Attention map quantization -> Similarity transform -> Zigzag -> block-to-block delta coding -> Elias gamma coding
-	-	YCoCg655 -> 4:2:0 -> DST-II -> Attention map quantization -> Similarity transform -> Zig-Zag -> delta coding -> Elias gamma coding
-	-	YCoCg655 -> 4:2:0 -> FWHT -> Attention map quantization -> Similarity transform -> Zig-Zag -> delta coding -> Elias gamma coding
-	-	YCoCg655 -> 4:2:0 -> Haar wavelet -> Attention map quantization -> Similarity transform -> Zigzag -> delta coding -> Elias gamma coding
+	-	YCoCg655 -> 4:2:0 -> DCT-II -> Attention map quantization -> Self-similarity transform -> Zig-Zag -> block-to-block delta coding -> Elias gamma coding
+	-	YCoCg655 -> 4:2:0 -> DST-II -> Attention map quantization -> Self-similarity transform -> Zig-Zag -> block-to-block delta coding -> Elias gamma coding
+	-	YCoCg655 -> 4:2:0 -> FWHT -> Attention map quantization -> Self-similarity transform -> Zig-Zag -> block-to-block delta coding -> Elias gamma coding
+	-	YCoCg655 -> 4:2:0 -> Haar wavelet -> Attention map quantization -> Self-similarity transform -> Zig-Zag -> block-to-block delta coding -> Elias gamma coding
+	-	RGB565 -> Self-similarity search -> Macroblock copy
+
+**Notes**
+-	Self-similarity transform will use rotations and flips to match the previous block.
 
 **Archiver**
 -	BZip3
