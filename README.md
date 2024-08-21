@@ -73,7 +73,7 @@ C_g: i16
 
 **Sharpness Threshold Measure (%) (STM)**
 
-Sharpen often dependent on color, contrast, and noise changes. This made STM effective for measuring image quality.
+Sharpen often dependent on color, contrast, and noise changes. This made STM effective for measuring subjective image quality.
 
 -	**Laplacian function**: Where `Img(x, y)` is the index of the image:
 
