@@ -91,15 +91,22 @@ if __name__ == '__main__':
 	jpg_5_image = 'eye_5.jpg'
 	noisy_image = 'eye_noise.png'
 	color_noisy_image = 'eye_color_noise.png'
+	blurred_image = 'eye_blurred.png'
 
 	print("Image Pair | PSNR (dB) | SSIM (f) | Contrast Ratio Difference (dB) | Brightness Difference (n) | Saturation Difference (n) | Sharpness Threshold Measure (%) | Pixel Difference (n)")
+	# Identical
 	print_metrics(jpg_95_image, jpg_95_image)
+
+	# Edits
 	print_metrics(original_image, noisy_image)
 	print_metrics(original_image, color_noisy_image)
+	print_metrics(original_image, blurred_image)
+
+	# JPGs
 	print_metrics(original_image, jpg_100_image)
 	print_metrics(original_image, jpg_99_image)
 	print_metrics(original_image, jpg_95_image)
+	print_metrics(original_image, jpg_5_image)
 	print_metrics(jpg_99_image, jpg_100_image)
 	print_metrics(jpg_99_image, jpg_95_image)
-	print_metrics(original_image, jpg_5_image)
 	print_metrics(jpg_100_image, jpg_5_image)
