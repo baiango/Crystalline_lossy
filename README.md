@@ -48,7 +48,7 @@ It has been proven over decades that the eyes can't see chrominance (Co, Cg) ver
 
 People find out it was much easier to remove chrominance pixels in YCoCg than RGB without others noticing. They did it by lowering the accuracy of YCoCg, regularly with divisions, and this is called quantization.
 
-Quantization is used for maximize zeros in YCoCg, and later on transformed and compressed by RLE (Run-length encoding). RLE compresses images by counting repeating pixels 'n' times to repeat the same pixels.
+Quantization is used for maximize zeros in YCoCg, and later on transformed and compressed by RLE (Run-length encoding). RLE compresses images by counting repeating pixels 'n' times and store in a binary file. Then uncompressing the image by repeat the same pixels 'n' times.
 
 -	**RGB to YCoCg:**
 ```math
