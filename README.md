@@ -27,14 +27,12 @@ There will be some educational Python scripts in the `/edu` folder used during c
 -	BZip3
 
 ## Core CLY Implementation
-**YCoCg**  
+### **YCoCg**  
 YCoCg is a different way to represent color in images. It separates luma (brightness) from color (chrominance).
 
 First, YCoCh takes brightness as luma (Y), and purple is used as (Co), last, green is used as (Cg) with purple as luma.
 
 Cg isn't pure green, but it stores purple as luma as well. Don't mislead by its name Co (chrominance orange), but it was red-blue chrominance, which is purple when combined.
-
-The point of YCoCg is to remove details in chrominance (Co, Cg) easily rather than improving luma's (Y) accuracy.
 
 This is the original JPG image.  
 ![](edu/lemon.jpg)  
@@ -48,67 +46,84 @@ It has been proven over decades that the eyes can't see chrominance (Co, Cg) ver
 
 People find out it was much easier to remove chrominance pixels in YCoCg than RGB without others noticing. They did it by lowering the accuracy of YCoCg, regularly with divisions, and this is called quantization.
 
+The point of YCoCg is to remove details in chrominance (Co, Cg) easily rather than improving luma's (Y) accuracy.
+
 Quantization is used for maximize zeros in YCoCg, and later on transformed and compressed by RLE (Run-length encoding). RLE compresses images by counting repeating pixels 'n' times and store in a binary file. Then uncompressing the image by repeat the same pixels 'n' times.
 
 -	**RGB to YCoCg:**
-```math
-Let f(r: u8, g: u8, b: u8) -> (u8, i8, i8) =
-\begin{bmatrix}
-Y \\
-C_o \\
-C_g
-\end{bmatrix}
-=
-\begin{bmatrix}
-\frac{R}{4} & \frac{G}{2} & \frac{B}{4} \\
-\frac{R: i16}{2} & 0 & \frac{-B : i16}{2} \\
-\frac{-R: i16}{4} & \frac{G : i16}{2} & \frac{-B : i16}{4}
-\end{bmatrix}
-\begin{bmatrix}
-R \\
-G \\
-B
-\end{bmatrix}
+```rs
+fn rgb_to_ycocg(r: u8, g: u8, b: u8) -> (u8, i8, i8) {
+	let y = r / 4 + g / 2 + b / 4;
+	let co = (r as i16 - b as i16) / 2;
+	let cg = -(r as i16 / 4) + g as i16 / 2 + -(b as i16 / 4);
+	(y, co as i8, cg as i8)
+}
 ```
 
 -	**YCoCg to RGB:**
-```math
-Let f(y: u8, co: i8, cg: i8) -> (u8, u8, u8) =
-\begin{bmatrix}
-R \\
-G \\
-B
-\end{bmatrix}
-=
-\begin{bmatrix}
-Y & C_o & -C_g \\
-Y & 0 & C_g \\
-Y & -C_o & -C_g
-\end{bmatrix}
-\begin{bmatrix}
-Y: i16 \\
-C_o: i16 \\
-C_g: i16
-\end{bmatrix}
+```rs
+fn ycocg_to_rgb(y: u8, co: i8, cg: i8) -> (u8, u8, u8) {
+	let y = y as i16;
+	let co = co as i16;
+	let cg = cg as i16;
+	let r = y + co - cg;
+	let g = y + cg;
+	let b = y - co - cg;
+	(r as u8, g as u8, b as u8)
+}
 ```
 
-**Sharpness Threshold Measure (%) (STM)**
+### **DCT-II and DCT-III**
+-	**DCT-II**
+```py
+def dct_ii(input_):
+	len_ = input_.shape[0]
+	coef = np.zeros(len_)
+	for coeff_i in range(len_):
+		for input_i in range(len_):
+			coef[coeff_i] += input_[input_i] / len_ * np.cos(np.pi * coeff_i * (input_i + 0.5))
+	return coef
+```
+
+-	**DCT-III**
+```py
+def dct_iii(input_):
+	len_ = input_.shape[0]
+	coef = np.zeros(len_)
+	for coeff_i in range(len_):
+		for input_i in range(1, len_):
+			coef[coeff_i] += input_[input_i] * 2.0 * np.cos(np.pi * input_i / len_  * (coeff_i + 1 / 2))
+		coef[coeff_i] += input_[0]
+	return coef
+```
+
+### **Sharpness Threshold Measure (%) (STM)**
 
 Sharpen often dependent on color, contrast, and noise changes. This made STM effective for measuring subjective image quality.
 
 -	**Laplacian function**: Where `Img(x, y)` is the index of the image:
 
-```math
-\nabla^2 Img(x, y) =
-Img \times
-\begin{bmatrix}
-0 & 1 & 0 \\
-1 & -4 & 1 \\
-0 & 1 & 0
-\end{bmatrix}
+```py
+def calculate_laplacian(image):
+	laplacian = np.array([[0, 1, 0],
+						  [1, -4, 1],
+						  [0, 1, 0]])
+	return convolve2d(image, laplacian)
 ```
 -	**Sharpness Threshold Measure**: Where `Img` is two grayscale images to compare and `T` is the threshold:  
 It's recommended to set the threshold to 8 to ignore film grains.
-```math
-\left( \frac{\sum \mathbb{I}_{\left| \nabla^2 Img_1 - \nabla^2 Img_2 \right| \geq T}}{\text{total\_pixels}} \right) \times 100\%
+```py
+def calculate_sharpness_threshold_measure(original, transformed, threshold=8):
+	original_array = np.array(original.convert('L'))
+	transformed_array = np.array(transformed.convert('L'))
+
+	laplacian1 = calculate_laplacian(original_array)
+	laplacian2 = calculate_laplacian(transformed_array)
+
+	sharpness_diff = np.abs(laplacian1 - laplacian2)
+	sharpness_change_detected = sharpness_diff >= threshold
+	sharpness_diff_pct = np.sum(sharpness_diff) / np.prod(sharpness_diff.shape) * 100.0
+	sharpness_threshold_pct = np.sum(sharpness_change_detected) / np.prod(sharpness_diff.shape) * 100.0
+
+	return sharpness_diff_pct, sharpness_threshold_pct
 ```
