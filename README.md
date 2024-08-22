@@ -92,7 +92,7 @@ def dct_iii(input_):
 	coef = np.zeros(len_)
 	for coeff_i in range(len_):
 		for input_i in range(1, len_):
-			coef[coeff_i] += input_[input_i] * 2.0 * np.cos(np.pi * input_i / len_  * (coeff_i + 1 / 2))
+			coef[coeff_i] += input_[input_i] * 2.0 * np.cos(np.pi * input_i / len_  * (coeff_i + 0.5))
 		coef[coeff_i] += input_[0]
 	return coef
 ```
@@ -101,8 +101,7 @@ def dct_iii(input_):
 
 Sharpen often dependent on color, contrast, and noise changes. This made STM effective for measuring subjective image quality.
 
--	**Laplacian function**: Where `Img(x, y)` is the index of the image:
-
+-	**Laplacian function**
 ```py
 def calculate_laplacian(image):
 	laplacian = np.array([[0, 1, 0],
@@ -110,8 +109,7 @@ def calculate_laplacian(image):
 						  [0, 1, 0]])
 	return convolve2d(image, laplacian)
 ```
--	**Sharpness Threshold Measure**: Where `Img` is two grayscale images to compare and `T` is the threshold:  
-It's recommended to set the threshold to 8 to ignore film grains.
+-	**Sharpness Threshold Measure**: It's recommended to set the threshold to 8 to ignore film grains.
 ```py
 def calculate_sharpness_threshold_measure(original, transformed, threshold=8):
 	original_array = np.array(original.convert('L'))
