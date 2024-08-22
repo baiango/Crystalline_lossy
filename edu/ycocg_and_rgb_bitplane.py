@@ -42,6 +42,13 @@ def example_ycocg_and_rgb_bitplane(image_path='lemon.jpg'):
 	# Open the image file
 	img = Image.open(image_path)
 	img_array = np.array(img)
+	r_array = np.zeros(img_array.shape)
+	r_array[..., 0] = img_array[..., 0]
+	g_array = np.zeros(img_array.shape)
+	g_array[..., 1] = img_array[..., 1]
+	b_array = np.zeros(img_array.shape)
+	b_array[..., 2] = img_array[..., 2]
+
 	y_array = np.zeros(img_array.shape)
 	co_array = np.zeros(img_array.shape)
 	cg_array = np.zeros(img_array.shape)
@@ -65,8 +72,13 @@ def example_ycocg_and_rgb_bitplane(image_path='lemon.jpg'):
 				print(f"Pixel ({i + 1}, {j + 1}): {pixel}")
 
 	Path("ycocg_converted").mkdir(parents=True, exist_ok=True)
-	img_edit = Image.fromarray(img_array & 0b1111_1000)
-	img_edit.save(f'ycocg_converted/img_edit.png')
+	r_img = Image.fromarray(r_array.astype(np.uint8))
+	r_img.save('ycocg_converted/r_img.png')
+	g_img = Image.fromarray(g_array.astype(np.uint8))
+	g_img.save('ycocg_converted/g_img.png')
+	b_img = Image.fromarray(b_array.astype(np.uint8))
+	b_img.save('ycocg_converted/b_img.png')
+
 	y_img = Image.fromarray(y_array.astype(np.uint8))
 	y_img.save('ycocg_converted/y_img.png')
 	co_img = Image.fromarray(co_array.astype(np.uint8))
