@@ -27,7 +27,28 @@ There will be some educational Python scripts in the `/edu` folder used during c
 -	BZip3
 
 ## Core CLY Implementation
-**YCoCg**
+**YCoCg**  
+YCoCg is a different way to represent color in images. It separates luma (brightness) from color (chrominance).
+
+First, YCoCh takes brightness as luma (Y), and purple is used as (Co), last, green is used as (Cg) with purple as luma.
+
+Cg isn't pure green, but it also stores purple as luma as well. Don't mislead by its name Co (chrominance orange), but it was red-blue chrominance, which is purple when combined.
+
+The point of YCoCg is to remove details in chrominance (Co, Cg) easily rather than improving luma's (Y) accuracy.
+
+This is the original JPG image.
+![](edu/lemon.jpg)
+This is the luma (Y) of the image. It's black-and-white, since it's brightness.
+![](edu/ycocg_converted/y_img.png)
+This is the red-blue chrominance (Co) of the image, the JPG's compression artifact shows JPG had removed to some extent of red on the edge of lemons.
+![](edu/ycocg_converted/co_re_img.png)
+This is the green chrominance (Cg) with red-blue as luma of the image. The JPG began more aggressively removing the green color from the water part of lemons, as shown by the pink blocky artifacts when it was supposed to be gray or green.
+![](edu/ycocg_converted/cg_re_img.png)
+It has been proven over decades that the eyes can't see chrominance (Co, Cg) very well than luma (Y) on daily basis.
+
+People find out it was much easier to remove chrominance pixels in YCoCg than RGB without others noticing. They did it by lowering the accuracy of YCoCg, regularly with divisions, and this is called quantization.
+
+Quantization is used for maximize zeros in YCoCg, and later on transformed and compressed by RLE (Run-length encoding). RLE compresses images by counting repeating pixels 'n' times to repeat the same pixels.
 
 -	**RGB to YCoCg:**
 ```math
