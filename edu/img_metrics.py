@@ -40,9 +40,7 @@ def calculate_laplacian(image):
 	laplacian = np.array([[0, 1, 0],
 						  [1, -4, 1],
 						  [0, 1, 0]])
-	laplacian_image = np.zeros_like(image)
-	laplacian_image = convolve2d(image, laplacian, mode='same', boundary='symm')
-	return laplacian_image
+	return convolve2d(image, laplacian)
 
 def calculate_sharpness_threshold_measure(original, transformed, threshold=8):
 	original_array = np.array(original.convert('L'))
