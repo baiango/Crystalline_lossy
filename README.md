@@ -40,9 +40,9 @@ This is the original JPG image.
 ![](edu/lemon.jpg)  
 This is the luma (Y) of the image. It's black-and-white, since it's brightness.  
 ![](edu/ycocg_converted/y_img.png)  
-This is the red-blue chrominance (Co) of the image, the JPG's compression artifact shows JPG had removed to some extent of red on the edge of lemons.  
+This is the purple chrominance (Co) of the image, the JPG's compression artifact shows JPG had removed to some extent of red on the edge of lemons.  
 ![](edu/ycocg_converted/co_re_img.png)  
-This is the green chrominance (Cg) with red-blue as luma of the image. The JPG began more aggressively removing the green color from the water part of lemons, as shown by the pink blocky artifacts when it was supposed to be gray or green.  
+This is the green chrominance (Cg) with purple as luma of the image. The JPG began more aggressively removing the green color from the water part of lemons, as shown by the pink blocky artifacts when it was supposed to be gray or green.  
 ![](edu/ycocg_converted/cg_re_img.png)  
 It has been proven over decades that the eyes can't see chrominance (Co, Cg) very well than luma (Y) on daily basis.
 
