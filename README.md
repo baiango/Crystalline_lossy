@@ -1,9 +1,9 @@
 # CLY - Crystalline lossy
-An Unlicense custom image crate. Please don't affiliate your project with me. You can claim that you made it or found it in a buried hard drive instead.
+An Unlicense custom image format. You can check [license information in edu/README.md](edu/README.md). Please don't affiliate your project with me. You can claim that you made it or found it in a buried hard drive instead.
 
 Other assets, such as image, are under CC0.
 
-There will be some educational Python scripts in the `/edu` folder used during creation of CLY. I took time to name them descriptively.
+There will be some educational Python scripts in the `edu` folder used during creation of CLY. I took time to name them descriptively.
 
 ## Blueprint
 **Quadtree split macroblocks:**
@@ -42,13 +42,13 @@ This is the purple chrominance (Co) of the image, the JPG's compression artifact
 ![](edu/ycocg_converted/co_re_img.png)  
 This is the green chrominance (Cg) with purple as luma of the image. The JPG began more aggressively removing the green color from the water part of lemons, as shown by the pink blocky artifacts when it was supposed to be gray or green.  
 ![](edu/ycocg_converted/cg_re_img.png)  
-It has been proven over decades that the eyes can't see chrominance (Co, Cg) very well than luma (Y) on daily basis.
+It has been proven over decades that the eyes can't see chrominance (Co, Cg) better than luma (Y) on a daily basis.
 
-People find out it was much easier to remove chrominance pixels in YCoCg than RGB without others noticing. They did it by lowering the accuracy of YCoCg, regularly with divisions, and this is called quantization.
+People found out it was much easier to remove chrominance pixels in YCoCg than RGB without others noticing. They did it by lowering the accuracy of YCoCg, regularly with divisions, and this is called quantization.
 
 The point of YCoCg is to remove details in chrominance (Co, Cg) easily rather than improving luma's (Y) accuracy.
 
-Quantization is used for maximize zeros in YCoCg, and later on transformed and compressed by RLE (Run-length encoding). RLE compresses images by counting repeating pixels 'n' times and store in a binary file. Then uncompressing the image by repeat the same pixels 'n' times.
+Quantization is used to maximize zeros in YCoCg, and later on transformed and compressed by RLE (Run-length encoding). RLE compresses images by counting repeating pixels 'n' times and store in a binary file. Then decompressing the image by repeating the same pixels 'n' times.
 
 -	**RGB to YCoCg:**
 ```rs
@@ -98,7 +98,6 @@ def dct_iii(input_):
 ```
 
 ### **Sharpness Threshold Measure (%) (STM)**
-
 Sharpen often dependent on color, contrast, and noise changes. This made STM effective for measuring subjective image quality.
 
 -	**Laplacian function**
