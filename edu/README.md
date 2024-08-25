@@ -1,8 +1,11 @@
 # License information
 ## Why not [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html)?
-We got antitrust laws to encourage freedom and competition. GPL was restrictive in its distribution, and companies were able to get around loopholes of GPL by using it internally only.
+We got antitrust laws to encourage freedom and competition. GPL was restrictive in its distribution, and companies were able to get around loopholes of GPL by using it internally only, or using SaaS.
 
 So, I thought [Unlicense](https://unlicense.org/) is the better way to boost freedom. Don't try to limit or claim your name to people if you're serious about sharing. I'm not doing ego-driven project.
+
+## Philosophy of CLY
+Every asset is a duty; the value isn't certain. I love creating w/ essentials. Including this text.
 
 ## Downloaded resources
 ### **lemon.jpg and its derivatives**
@@ -21,3 +24,6 @@ License: Unlicense
 Made by me in Affinity Photo 1 and Affinity Designer 1 with [FLUX.1 schnel](https://huggingface.co/spaces/black-forest-labs/FLUX.1-schnell) generated images.  
 License: Unlicense  
 
+### **model_012_intimate.afphoto and its derivatives**
+Made by me in Affinity Photo 1.  
+License: Unlicense  

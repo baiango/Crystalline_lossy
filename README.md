@@ -30,7 +30,7 @@ There will be some educational Python scripts in the `edu` folder used during cr
 ### **YCoCg**  
 YCoCg is a different way to represent color in images. It separates luma (brightness) from color (chrominance).
 
-First, YCoCh takes brightness as luma (Y), and purple is used as (Co), last, green is used as (Cg) with purple as luma.
+First, YCoCg takes brightness as luma (Y), and purple is used as (Co), last, green is used as (Cg) with purple as luma.
 
 Cg isn't pure green, but it stores purple as luma as well. Don't mislead by its name Co (chrominance orange), but it was red-blue chrominance, which is purple when combined.
 
@@ -74,6 +74,9 @@ fn ycocg_to_rgb(y: u8, co: i8, cg: i8) -> (u8, u8, u8) {
 ```
 
 ### **DCT-II and DCT-III**
+DCT-II coefficients wasn't in intuitive mathematically at all.
+![](edu/dct_len_4.png)  
+
 -	**DCT-II**
 ```py
 def dct_ii(input_):
