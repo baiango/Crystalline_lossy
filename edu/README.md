@@ -5,7 +5,7 @@ We got antitrust laws to encourage freedom and competition. GPL was restrictive 
 So, I thought [Unlicense](https://unlicense.org/) is the better way to boost freedom. Don't try to limit or claim your name to people if you're serious about sharing. I'm not doing ego-driven project.
 
 ## Philosophy of CLY
-Every asset is a duty; the value isn't certain. I love creating w/ essentials. Including this text.
+Every asset is a duty; the value isn't certain. Flesh is weak, know when to let go of your goal to soothe. I love creating w/ essentials, including this text.
 
 ## Downloaded resources
 ### **lemon.jpg and its derivatives**
