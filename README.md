@@ -14,9 +14,9 @@ I developed more effective methods and lessen compute cost for every time I star
 ## Blueprint v2
 This blueprint attempts to improve lossless compression ratio with rearrangement, lossy mode is deferred.
 
-Color Space: RGB888
-Macroblock size: 256x256
-Rearrangement: Zig-Zag | Clockwise 90 degrees rotation
-Filters: Sub
-Machine Learning Prediction: 3-channels Bitwise Trigram
-Entropy coding: Elias gamma coding + Bzip3
+Color Space: RGB888  
+Macroblock size: 256x256  
+Rearrangement: Zig-Zag scanning | Clockwise 90 degrees rotation  
+Filters: column up & row sub filter
+Machine Learning Prediction: 3-channels Bitwise Trigram  
+Entropy coding: Elias gamma coding + Bzip3  
